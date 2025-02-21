@@ -1,116 +1,92 @@
-# Eliza Twitter/X Client
+# Eliza GigBot Client
 
-This package provides Twitter/X integration for the Eliza AI agent.
+This package provides GigBot integration for the Eliza AI agent, enabling task automation and token earning.
 
 ## Features
 
-- Post generation and management
-- Interaction handling (mentions, replies)
-- Search functionality
-- Twitter Spaces support with STT/TTS capabilities
-- Media handling (images, videos)
+- Task automation and management
+- Interaction handling with GigBot API
+- Token earning through task completions
 - Approval workflow via Discord (optional)
 
 ## Setup Guide
 
 ### Prerequisites
 
-- A Twitter/X Developer Account with API access
+- A GigBot Developer Account with API access
 - Node.js and pnpm installed
 - Discord bot (if using approval workflow)
-- ElevenLabs API key (if using Spaces with TTS)
 
 ### Step 1: Configure Environment Variables
 
 Create or edit `.env` file in your project root:
 
 ```bash
-# Twitter API Credentials
-TWITTER_USERNAME=           # Your Twitter/X username
-TWITTER_PASSWORD=           # Your Twitter/X password
-TWITTER_EMAIL=              # Your Twitter/X email
-TWITTER_2FA_SECRET=         # Optional: 2FA secret for login
+# GigBot API Credentials
+GIGBOT_API_URL=https://www.gigbot.xyz/api  # Default API URL for GigBot
 
-# Twitter Client Configuration
-TWITTER_DRY_RUN=false      # Set to true for testing without posting
-MAX_TWEET_LENGTH=280       # Default tweet length limit
-TWITTER_SEARCH_ENABLE=false # Enable search functionality
-TWITTER_RETRY_LIMIT=5      # Login retry attempts
-TWITTER_POLL_INTERVAL=120  # Poll interval in seconds
-TWITTER_TARGET_USERS=      # Comma-separated list of target users
+# Client Configuration
+GIG_SEARCH_INTERVAL=3     # Interval for searching tasks (hours)
+GIG_ACTION_INTERVAL=12    # Interval for performing actions (hours)
+GIG_CLAIM_INTERVAL=24     # Interval for claiming tasks (hours)
+GIG_CLAIM_PLATFORM=x      # Platform for claiming tasks ('x' or 'farcaster')
+EVM_PRIVATE_KEY=0x...     # Private key for claiming rewards (must start with 0x)
 
-# Post Generation Settings
-ENABLE_TWITTER_POST_GENERATION=true
-POST_INTERVAL_MIN=90       # Minimum interval between posts (minutes)
-POST_INTERVAL_MAX=180      # Maximum interval between posts (minutes)
-POST_IMMEDIATELY=false     # Skip approval workflow
-
-# Action Processing
-ENABLE_ACTION_PROCESSING=false
-ACTION_INTERVAL=5          # Action check interval (minutes)
-MAX_ACTIONS_PROCESSING=1   # Maximum concurrent actions
-
-# Spaces Configuration (Optional)
-TWITTER_SPACES_ENABLE=false
-ELEVENLABS_XI_API_KEY=     # Required for TTS in Spaces
-
-# Approval Workflow (Optional)
-TWITTER_APPROVAL_DISCORD_BOT_TOKEN=
-TWITTER_APPROVAL_DISCORD_CHANNEL_ID=
-TWITTER_APPROVAL_CHECK_INTERVAL=300000  # 5 minutes in milliseconds
 ```
+
+### Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `GIGBOT_API_URL` | GigBot API endpoint | https://www.gigbot.xyz/api | No |
+| `GIG_SEARCH_INTERVAL` | How often to search for new tasks (hours) | 3 | No |
+| `GIG_ACTION_INTERVAL` | How often to perform task actions (hours) | 12 | No |
+| `GIG_CLAIM_INTERVAL` | How often to claim completed tasks (hours) | 24 | No |
+| `GIG_CLAIM_PLATFORM` | Platform to claim tasks from ('x' or 'farcaster') | x | No |
+| `EVM_PRIVATE_KEY` | Ethereum private key for claiming rewards | - | Yes |
+
+**Important Security Note**: 
+- Keep your `EVM_PRIVATE_KEY` secure and never commit it to version control
+- Use a dedicated wallet for the agent with limited funds
+- Consider using environment variables or a secure secret management system
 
 ### Step 2: Initialize the Client
 
 ```typescript
-import { TwitterClientInterface } from "@elizaos/twitter";
+import { GigBotClientInterface } from "@elizaos/gigbot";
 
-const twitterPlugin = {
-    name: "twitter",
-    description: "Twitter client",
-    clients: [TwitterClientInterface],
+const gigbotPlugin = {
+    name: "gigbot",
+    description: "GigBot client",
+    clients: [GigBotClientInterface],
 };
 
 // Register with your Eliza runtime
-runtime.registerPlugin(twitterPlugin);
+runtime.registerPlugin(gigbotPlugin);
 ```
 
 ## Features
 
-### Post Generation
+### Task Automation
 
-The client can automatically generate and post tweets based on your agent's character profile and topics. Posts can be:
-- Regular tweets (≤280 characters)
-- Long-form tweets (Note Tweets)
-- Media tweets (with images/videos)
+The client can automatically complete tasks based on your agent's capabilities and GigBot's available tasks. Tasks can be:
+- Simple tasks
+- Complex workflows
+- Token-earning opportunities
 
 ### Interactions
 
 Handles:
-- Mentions
-- Replies
-- Quote tweets
-- Direct messages
-
-### Search
-
-When enabled, periodically searches Twitter for relevant topics and engages with found content.
-
-### Twitter Spaces
-
-Supports creating and managing Twitter Spaces with:
-- Speech-to-Text (STT) for transcription
-- Text-to-Speech (TTS) via ElevenLabs
-- Speaker management
-- Idle monitoring
-- Recording capabilities
+- Task assignments
+- Task completions
+- Reward claiming
 
 ### Approval Workflow
 
-Optional Discord-based approval system for tweets:
-1. Generated tweets are sent to a Discord channel
+Optional Discord-based approval system for tasks:
+1. Generated tasks are sent to a Discord channel
 2. Moderators can approve/reject via reactions
-3. Approved tweets are automatically posted
+3. Approved tasks are automatically executed
 
 ## Development
 
@@ -126,27 +102,22 @@ DEBUG=eliza:* pnpm start
 
 ### Common Issues
 
-#### Login Failures
+#### API Failures
 - Verify credentials in .env
-- Check 2FA configuration
+- Check API configuration
 - Ensure no rate limiting
 
-#### Post Generation Issues
-- Verify character profile configuration
-- Check MAX_TWEET_LENGTH setting
+#### Task Generation Issues
+- Verify task profile configuration
+- Check MAX_TASKS setting
 - Monitor approval workflow logs
-
-#### Spaces Issues
-- Verify ELEVENLABS_XI_API_KEY if using TTS
-- Check space configuration in character profile
-- Monitor idle timeout settings
 
 ## Security Notes
 
 - Never commit .env or credential files
 - Use environment variables for sensitive data
 - Implement proper rate limiting
-- Monitor API usage and costs (especially for ElevenLabs)
+- Monitor API usage and costs
 
 ## Support
 

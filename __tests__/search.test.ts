@@ -87,7 +87,8 @@ describe('GigSearchClient', () => {
             GIG_SEARCH_INTERVAL: '1',
             GIG_ACTION_INTERVAL: '1',
             GIG_CLAIM_INTERVAL: '1',
-            GIG_CLAIM_PLATFORM: 'x'
+            GIG_CLAIM_PLATFORM: 'x',
+            EVM_PRIVATE_KEY: '0x1234567890abcdef'
         };
 
         baseClient = {
