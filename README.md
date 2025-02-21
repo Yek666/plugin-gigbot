@@ -13,9 +13,8 @@ This package provides GigBot integration for the Eliza AI agent, enabling task a
 
 ### Prerequisites
 
-- A GigBot Developer Account with API access
 - Node.js and pnpm installed
-- Discord bot (if using approval workflow)
+- Eliza runtime
 
 ### Step 1: Configure Environment Variables
 
