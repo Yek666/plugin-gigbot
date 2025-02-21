@@ -105,12 +105,6 @@ DEBUG=eliza:* pnpm start
 #### API Failures
 - Verify credentials in .env
 - Check API configuration
-- Ensure no rate limiting
-
-#### Task Generation Issues
-- Verify task profile configuration
-- Check MAX_TASKS setting
-- Monitor approval workflow logs
 
 ## Security Notes
 
