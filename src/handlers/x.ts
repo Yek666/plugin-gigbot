@@ -1,0 +1,62 @@
+import { elizaLogger, IAgentRuntime } from '@elizaos/core';
+import { PlatformTask } from '../actions';
+import { PrivateKeyAccount, privateKeyToAccount } from 'viem/accounts';
+import { gigService } from '../services/gig.service';
+import { GigHandler } from './base';
+
+export class XGigHandler implements GigHandler {
+  private wallet: PrivateKeyAccount;
+  constructor(private runtime: IAgentRuntime) {
+    if (this.runtime.getSetting('EVM_PRIVATE_KEY')) {
+      this.wallet = privateKeyToAccount(this.runtime.getSetting('EVM_PRIVATE_KEY') as `0x${string}`);
+    }
+  }
+  async executeTask(task: PlatformTask): Promise<boolean> {
+    const client = this.runtime.clients.twitter?.client;
+    if (!client) {
+      elizaLogger.error('Twitter client not available');
+      return false;
+    }
+    switch (task.type) {
+      case 'boost':
+        const tweetId = await this.extractPostId(task.targetUrl);
+        console.log('tweet id: ', tweetId);
+
+        await Promise.all([client.twitterClient.retweet(tweetId), client.twitterClient.likeTweet(tweetId)]);
+        return true;
+    }
+  }
+  async extractPostId(url: string): Promise<string | null> {
+    if (!url) return null;
+    const match = url.match(/(?:twitter|x)\.com\/\w+\/status\/(\d+)/);
+    return match ? match[1] : null;
+  }
+
+  async claimRewards(): Promise<boolean> {
+    const mainClient = this.runtime.clients.twitter?.client;
+
+    if (!mainClient) {
+      elizaLogger.error('Twitter client not available');
+      return false;
+    }
+
+    const res = await mainClient.twitterClient.sendTweet(`Claim my rewards ${this.wallet?.address}`);
+    const { data } = await res.json();
+
+    const tweetResult = data?.create_tweet?.tweet_results?.result as {
+      rest_id: string;
+      legacy: { user_id_str: string };
+    };
+
+    const isClaimed = await gigService.claimRewards(
+      `https://x.com/${tweetResult.legacy.user_id_str}/status/${tweetResult.rest_id}`,
+    );
+
+    if (!isClaimed) {
+      elizaLogger.error('Failed to claim rewards');
+      return false;
+    }
+
+    return true;
+  }
+}
