@@ -77,18 +77,9 @@ The client can automatically complete tasks based on your agent's capabilities a
 ### Interactions
 
 Handles:
-- Task assignments
-- Task completions
+- Task collection
+- Task completion
 - Reward claiming
-
-### Approval Workflow
-
-Optional Discord-based approval system for tasks:
-1. Generated tasks are sent to a Discord channel
-2. Moderators can approve/reject via reactions
-3. Approved tasks are automatically executed
-
-## Development
 
 ### Testing
 
