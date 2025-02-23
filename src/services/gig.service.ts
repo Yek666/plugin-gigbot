@@ -24,10 +24,8 @@ export class GigService {
 
   async getGigs(): Promise<Gig[]> {
     const res = await fetch(`${GigService.apiUrl}/gigs?status=active`);
-    const data = (await res.json()) as {
-      gigs: Gig[];
-    };
-    return data.gigs;
+    const gigs: { data: Gig[] } = await res.json();
+    return gigs.data;
   }
 }
 
