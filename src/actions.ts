@@ -139,10 +139,6 @@ export class GigActionClient {
       return;
     }
 
-    const timeout = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Task timeout')), 5 * 60 * 1000) // 5 minutes
-    );
-
     try {
       this.activeGigs.add(gigId);
       elizaLogger.debug(`Added gig ${gigId} to active gigs`);
