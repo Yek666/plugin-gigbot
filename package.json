@@ -1,6 +1,6 @@
 {
   "name": "@elizaos-plugins/plugin-gigbot",
-  "version": "0.25.6-alpha.1",
+  "version": "0.25.8",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -19,7 +19,6 @@
     "dist"
   ],
   "dependencies": {
-    "@elizaos/core": "0.25.6-alpha.1",
     "agent-twitter-client": "0.0.18",
     "dotenv": "^16.4.7",
     "glob": "11.0.0",
