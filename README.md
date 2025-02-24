@@ -64,6 +64,40 @@ const gigbotPlugin = {
 runtime.registerPlugin(gigbotPlugin);
 ```
 
+**Important**: The GigBot plugin requires the Twitter client to be initialized first. You must:
+1. Include the Twitter plugin before GigBot in your plugins array
+2. Modify the client initialization to pass existing clients to GigBot
+
+Example of required client initialization:
+
+```typescript
+export async function initializeClients(
+    character: Character,
+    runtime: IAgentRuntime
+) {
+    const clients: ClientInstance[] = [];
+
+    if (character.plugins?.length > 0) {
+        for (const plugin of character.plugins) {
+            // Check if current plugin is GigBot
+            let isGigbot = plugin.name === "@elizaos-plugins/plugin-gigbot";
+
+            if (plugin.clients) {
+                for (const client of plugin.clients) {
+                    // Pass existing clients to GigBot runtime
+                    const startedClient = await client.start(
+                        isGigbot ? {...runtime, clients} : runtime
+                    );
+                    clients.push(startedClient);
+                }
+            }
+        }
+    }
+
+    return clients;
+}
+```
+
 ## Features
 
 ### Task Automation

@@ -12,8 +12,10 @@ export class XGigHandler implements GigHandler {
     }
   }
   async executeTask(task: PlatformTask): Promise<boolean> {
-    const client = this.runtime.clients.twitter?.client;
-    if (!client) {
+    const twitterManager = this.runtime.clients.find(client => 
+      typeof client === 'object' && 'client' in client && 'twitterClient' in (client as any).client
+  ) as any
+    if (!twitterManager) {
       elizaLogger.error('Twitter client not available');
       return false;
     }
@@ -22,7 +24,7 @@ export class XGigHandler implements GigHandler {
         const tweetId = await this.extractPostId(task.targetUrl);
         console.log('tweet id: ', tweetId);
 
-        await Promise.all([client.twitterClient.retweet(tweetId), client.twitterClient.likeTweet(tweetId)]);
+        await Promise.all([twitterManager.client.twitterClient.retweet(tweetId), twitterManager.client.twitterClient.likeTweet(tweetId)]);
         return true;
     }
   }
@@ -33,14 +35,16 @@ export class XGigHandler implements GigHandler {
   }
 
   async claimRewards(): Promise<boolean> {
-    const mainClient = this.runtime.clients.twitter?.client;
+    const twitterManager = this.runtime.clients.find(client => 
+      typeof client === 'object' && 'client' in client && 'twitterClient' in (client as any).client
+    ) as any;
 
-    if (!mainClient) {
+    if (!twitterManager) {
       elizaLogger.error('Twitter client not available');
       return false;
     }
 
-    const res = await mainClient.twitterClient.sendTweet(`Claim my rewards ${this.wallet?.address}`);
+    const res = await twitterManager.client.twitterClient.sendTweet(`Claim my rewards ${this.wallet?.address}`);
     const { data } = await res.json();
 
     const tweetResult = data?.create_tweet?.tweet_results?.result as {
