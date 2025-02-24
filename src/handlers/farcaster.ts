@@ -62,7 +62,7 @@ export class FarcasterGigHandler implements GigHandler {
     }
 
     const { success, cast } = await postFarcasterCast({
-      text: `Claim my rewards ${this.wallet.address}`,
+      text: `Claim my rewards ${this.wallet.address} @gigbot.eth`,
       signerUuid,
       neynarApiKey,
     });

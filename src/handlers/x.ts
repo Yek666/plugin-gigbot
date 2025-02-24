@@ -44,7 +44,7 @@ export class XGigHandler implements GigHandler {
       return false;
     }
 
-    const res = await twitterManager.client.twitterClient.sendTweet(`Claim my rewards ${this.wallet?.address}`);
+    const res = await twitterManager.client.twitterClient.sendTweet(`Claim my rewards ${this.wallet?.address} @gigbot_`);
     const { data } = await res.json();
 
     const tweetResult = data?.create_tweet?.tweet_results?.result as {
