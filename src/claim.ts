@@ -21,7 +21,7 @@ export class GigClaimClient {
       const intervalHours = parseInt(this.client.gigConfig.GIG_CLAIM_INTERVAL, 10);
       setTimeout(claimLoop, intervalHours * 3600 * 1000);
     };
-    claimLoop();
+    setTimeout(claimLoop, 90 * 1000); // 90 seconds
   }
 
   private async processClaims() {
@@ -32,7 +32,6 @@ export class GigClaimClient {
 
     try {
       this.isProcessing = true;
-      console.log('STARTING CLAIM PROCESSING CYCLE');
 
       const handler = this.handlerManager.getHandler(this.client.gigConfig.GIG_CLAIM_PLATFORM);
       const success = await handler.claimRewards();

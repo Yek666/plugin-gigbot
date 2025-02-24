@@ -39,7 +39,7 @@ export class GigActionClient {
       const intervalHours = parseInt(this.client.gigConfig.GIG_ACTION_INTERVAL, 10);
       setTimeout(actionLoop, intervalHours * 3600 * 1000);
     };
-    actionLoop();
+    setTimeout(actionLoop, 45 * 1000); // 45 seconds
   }
 
   private async processActions() {
@@ -50,7 +50,7 @@ export class GigActionClient {
 
     try {
       this.isProcessing = true;
-      elizaLogger.debug('Starting action processing cycle');
+      elizaLogger.log('Starting action processing cycle');
 
       const gigs = await gigService.getGigs();
       if (!gigs?.length) return;

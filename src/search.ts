@@ -26,20 +26,20 @@ export class GigSearchClient {
       const intervalHours = parseInt(this.client.gigConfig.GIG_SEARCH_INTERVAL, 10);
       setTimeout(searchLoop, intervalHours * 3600 * 1000);
     };
-    searchLoop();
+    setTimeout(searchLoop, 15 * 1000); // 15 seconds
   }
 
   private async searchGigs() {
     if (this.isProcessing) {
-      elizaLogger.debug('Skipping gig search - already in progress');
+      elizaLogger.warn('Skipping gig search - already in progress');
       return;
     }
 
     try {
       this.isProcessing = true;
-      elizaLogger.debug('Starting gig search cycle');
+      elizaLogger.log('Starting gig search cycle');
 
-      elizaLogger.debug(`Fetching gigs from ${this.client.gigConfig.GIGBOT_API_URL}/gigs`);
+      elizaLogger.log(`Fetching gigs from ${this.client.gigConfig.GIGBOT_API_URL}/gigs`);
       const response = await fetch(`${this.client.gigConfig.GIGBOT_API_URL}/gigs?status=active`, {
         headers: this.client.apiClient.headers,
       });
@@ -49,7 +49,6 @@ export class GigSearchClient {
       }
 
       const gigs: { data: Gig[] } = await response.json();
-      elizaLogger.debug(`Retrieved ${gigs.data.length} gigs from API`);
 
       for (const gig of gigs.data) {
         elizaLogger.debug(`Processing gig`, {
