@@ -61,8 +61,8 @@ export class FarcasterGigHandler implements GigHandler {
       return false;
     }
 
-    const { success, cast } = await postFarcasterCast({
-      text: `Claim my rewards ${this.wallet.address} @gigbot.eth`,
+    const { success } = await postFarcasterCast({
+      text: `@gigbot.eth Claim my rewards ${this.wallet.address}`,
       signerUuid,
       neynarApiKey,
     });
@@ -72,20 +72,6 @@ export class FarcasterGigHandler implements GigHandler {
       return false;
     }
 
-    elizaLogger.info('Claim cast posted', { cast });
-
-    const {
-      cast: {
-        author: { username },
-      },
-    } = await getFarcasterCastByHash(cast.hash, neynarApiKey);
-
-    const isClaimed = await gigService.claimRewards(`https://warpcast.com/${username}/${cast.hash.slice(0, 10)}`);
-
-    if (!isClaimed) {
-      elizaLogger.error('Failed to claim rewards');
-      return false;
-    }
     return true;
   }
 }
