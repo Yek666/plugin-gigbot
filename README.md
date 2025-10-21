@@ -1,6 +1,6 @@
-# Eliza GigBot Client
+# yekmatron GigBot Client
 
-This package provides GigBot integration for the Eliza AI agent, enabling task automation and token earning.
+This package provides GigBot integration for the yekmatron AI agent, enabling task automation and token earning.
 
 ## Features
 
@@ -14,7 +14,7 @@ This package provides GigBot integration for the Eliza AI agent, enabling task a
 ### Prerequisites
 
 - Node.js and pnpm installed
-- Eliza runtime
+- yekmatron runtime
 
 ### Step 1: Configure Environment Variables
 
@@ -60,7 +60,7 @@ const gigbotPlugin = {
     clients: [GigBotClientInterface],
 };
 
-// Register with your Eliza runtime
+// Register with your yekmatron runtime
 runtime.registerPlugin(gigbotPlugin);
 ```
 
@@ -121,7 +121,7 @@ Handles:
 pnpm test
 
 # Run with debug logging
-DEBUG=eliza:* pnpm start
+DEBUG=yekmatron:* pnpm start
 ```
 
 ### Common Issues
@@ -141,7 +141,7 @@ DEBUG=eliza:* pnpm start
 
 For issues or questions:
 1. Check the Common Issues section
-2. Review debug logs (enable with DEBUG=eliza:*)
+2. Review debug logs (enable with DEBUG=yekmatron:*)
 3. Open an issue with:
    - Error messages
    - Configuration details
